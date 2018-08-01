@@ -624,10 +624,10 @@
             "examples" : {
               "application/scim+json" : {
                 "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
-                "totalResults" : "1",
-                "totalPage" : "1",
-                "page" : "1",
-                "itemPerPage" : "100",
+                "totalResults" : 1,
+                "totalPage" : 1,
+                "page" : 1,
+                "itemPerPage" : 100,
                 "resources" : [ {
                   "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:Entitlement", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" ],
                   "id" : "513",
@@ -635,7 +635,7 @@
                     "created" : 1532440108000,
                     "lastModified" : 1532440115000
                   },
-                  "type" : "2",
+                  "type" : 2,
                   "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" : {
                     "code" : "b0bf8391-e469-4e9d-a617-ec40a208443b",
                     "application_id" : "109",
