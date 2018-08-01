@@ -517,7 +517,7 @@
         }
       }
     },
-    "/acg/users/{userId}/entitlement" : {
+    "/agc/users/{userId}/entitlement" : {
       "post" : {
         "tags" : [ "AGC" ],
         "summary" : "Add User Entitlement",
