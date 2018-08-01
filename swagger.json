@@ -638,7 +638,7 @@
                   "type" : 2,
                   "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" : {
                     "code" : "b0bf8391-e469-4e9d-a617-ec40a208443b",
-                    "application_id" : "109",
+                    "application_id" : 109,
                     "application_name" : "Portail Fournisseur",
                     "attr4" : "rest_b37e790b-6738-45b5-b4f8-929b219870d8",
                     "lastModTime" : 1532440115000,
