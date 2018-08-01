@@ -591,7 +591,7 @@
         "tags" : [ "AGC" ],
         "summary" : "Find User Entitlement",
         "description" : "Finds the entitlements of the user through a SCIM search request.",
-        "operationId" : "findUserEntitlements",
+        "operationId" : "findUserEntitlement",
         "produces" : [ "application/scim+json" ],
         "consumes" : [ "application/scim+json" ],
         "parameters" : [ {
@@ -620,7 +620,45 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "OK, body contains content"
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+                "totalResults" : "1",
+                "totalPage" : "1",
+                "page" : "1",
+                "itemPerPage" : "100",
+                "resources" : [ {
+                  "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:Entitlement", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" ],
+                  "id" : "513",
+                  "meta" : {
+                    "created" : 1532440108000,
+                    "lastModified" : 1532440115000
+                  },
+                  "type" : "2",
+                  "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" : {
+                    "code" : "b0bf8391-e469-4e9d-a617-ec40a208443b",
+                    "application_id" : "109",
+                    "application_name" : "Portail Fournisseur",
+                    "attr4" : "rest_b37e790b-6738-45b5-b4f8-929b219870d8",
+                    "lastModTime" : 1532440115000,
+                    "visibilityViolation" : 0,
+                    "enabled" : 1,
+                    "group_code" : "SGDBF",
+                    "group_name" : "SGDBF",
+                    "group_id" : 158,
+                    "incompHigh" : false,
+                    "incompMedium" : false,
+                    "incompLow" : false,
+                    "administrative" : 0,
+                    "published" : 1,
+                    "isFulFilled" : false,
+                    "creationDate" : 1532440108000,
+                    "name" : "PortalUsers"
+                  }
+                } ]
+              }
+            }
           },
           "204" : {
             "description" : "No content"
