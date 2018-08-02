@@ -532,15 +532,15 @@
           "required" : true,
           "type" : "integer"
         }, {
-          "name" : "entId",
-          "in" : "query",
-          "description" : "Specifies the list of entitlements Ids to add to user.",
-          "required" : true,
-          "type" : "integer"
-        }, {
           "name" : "groupId",
           "in" : "query",
           "description" : "Specifies the group ID",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "entId",
+          "in" : "query",
+          "description" : "Specifies the list of entitlements Ids to add to user.",
           "required" : true,
           "type" : "integer"
         }, {
@@ -563,6 +563,20 @@
           "description" : "Boolean value",
           "required" : false,
           "type" : "boolean"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:schemas:core:2.0:User with urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User extension",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
         } ],
         "security" : [ {
           "igi_api_key" : [ ]
