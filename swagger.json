@@ -14,7 +14,7 @@
     }
   },
   "host" : "virtserver.swaggerhub.com",
-  "basePath" : "/atiyou/swagger-igi_api/1.0.0",
+  "basePath" : "/SGDBF_IT_IAM/swagger-igi-api/1.0.0",
   "tags" : [ {
     "name" : "AGC",
     "description" : "Everything about Access Governance API methods",
