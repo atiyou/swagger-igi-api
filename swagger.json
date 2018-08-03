@@ -605,7 +605,6 @@
         "description" : "Removes one or more entitlements associated to an user.",
         "operationId" : "removeUserEntitlement",
         "produces" : [ "application/scim+json" ],
-        "consumes" : [ "application/scim+json" ],
         "parameters" : [ {
           "name" : "userId",
           "in" : "path",
@@ -630,6 +629,12 @@
           "description" : "Specifies the group ID",
           "required" : true,
           "type" : "integer"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
         } ],
         "security" : [ {
           "igi_api_key" : [ ]
@@ -722,6 +727,83 @@
                     "isFulFilled" : false,
                     "creationDate" : 1532440108000,
                     "name" : "PortalUsers"
+                  }
+                } ]
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/hierarchies/{hierarchyId}/groups/.search" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Find Group",
+        "description" : "Finds group through a SCIM search request.",
+        "operationId" : "findGroup",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "hierarchyId",
+          "in" : "path",
+          "description" : "Specifies the hierarchy ID (1 for ORGANIZATIONAL_UNIT)",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+                "totalResults" : 1,
+                "totalPage" : 1,
+                "page" : 1,
+                "itemPerPage" : 100,
+                "resources" : [ {
+                  "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:Group", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Group" ],
+                  "id" : "102",
+                  "meta" : {
+                    "lastModified" : 1522317836706
+                  },
+                  "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Group" : {
+                    "name" : "FOURNISSEURS",
+                    "code" : "FOURNISSEURS",
+                    "description" : "FOURNISSEURS",
+                    "attr3" : 0,
+                    "lastModTime" : 1522317836706,
+                    "hierarchy_id" : 1,
+                    "hierarchy_name" : "ORGANIZATIONAL_UNIT",
+                    "incompHigh" : false,
+                    "incompMedium" : false,
+                    "incompLow" : false,
+                    "excludeSoD" : 0
                   }
                 } ]
               }
