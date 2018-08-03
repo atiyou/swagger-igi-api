@@ -449,7 +449,7 @@
           "in" : "path",
           "description" : "Specifies user account ID",
           "required" : true,
-          "type" : "integer"
+          "type" : "string"
         }, {
           "name" : "codeOperation",
           "in" : "query",
@@ -465,7 +465,7 @@
         }, {
           "name" : "urn",
           "in" : "body",
-          "description" : "urn:ietf:params:scim:schemas:core:2.0:User with urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User extension",
+          "description" : "urn:ibm:params:scim:api:messages:2.0:ChangePwd",
           "schema" : {
             "type" : "string"
           },
