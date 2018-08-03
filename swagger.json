@@ -796,7 +796,7 @@
                     "name" : "FOURNISSEURS",
                     "code" : "FOURNISSEURS",
                     "description" : "FOURNISSEURS",
-                    "attr3" : 0,
+                    "attr3" : "0",
                     "lastModTime" : 1522317836706,
                     "hierarchy_id" : 1,
                     "hierarchy_name" : "ORGANIZATIONAL_UNIT",
