@@ -68,8 +68,6 @@
           "type" : "string"
         } ],
         "security" : [ {
-          "igi_basic_auth" : [ ]
-        }, {
           "igi_api_key" : [ ]
         } ],
         "responses" : {
