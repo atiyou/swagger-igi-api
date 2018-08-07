@@ -68,7 +68,7 @@
           "type" : "string"
         } ],
         "security" : [ {
-          "igi_api_key" : [ ]
+          "igi_basic_auth" : [ ]
         } ],
         "responses" : {
           "200" : {
