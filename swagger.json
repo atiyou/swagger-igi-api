@@ -73,7 +73,7 @@
         "responses" : {
           "200" : {
             "description" : "OK, body contains token to use calling next api method",
-            "examples" : {
+            "schema" : {
               "$ref" : "#/definitions/ApiTokenExample"
             }
           },
@@ -96,7 +96,7 @@
         "responses" : {
           "200" : {
             "description" : "OK, body contains the new token",
-            "examples" : {
+            "schema" : {
               "$ref" : "#/definitions/ApiTokenExample"
             }
           },
@@ -951,7 +951,39 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "OK, body contains content"
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+                "totalResults" : 1,
+                "totalPage" : 1,
+                "page" : 1,
+                "itemPerPage" : 100,
+                "resources" : [ {
+                  "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:Entitlement", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" ],
+                  "id" : "513",
+                  "meta" : {
+                    "created" : 1523958923000,
+                    "lastModified" : 1523958922000
+                  },
+                  "type" : 2,
+                  "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" : {
+                    "code" : "b0bf8391-e469-4e9d-a617-ec40a208443b",
+                    "application_id" : 109,
+                    "application_name" : "Portail Fournisseur",
+                    "lastModTime" : 1523958922000,
+                    "incompHigh" : false,
+                    "incompMedium" : false,
+                    "incompLow" : false,
+                    "administrative" : 0,
+                    "published" : 1,
+                    "isFulFilled" : false,
+                    "creationDate" : 1532440108000,
+                    "name" : "PortalUsers"
+                  }
+                } ]
+              }
+            }
           },
           "204" : {
             "description" : "No content"
@@ -978,7 +1010,7 @@
   },
   "definitions" : {
     "ApiTokenExample" : {
-      "type" : "object",
+      "type" : "string",
       "example" : "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/Pgo8VXNlclNlY3VyaXR5RGF0YT4KICAgIDxTZWN1cml0eUVudGl0aWVzPgogICAgICAgIDxVc2VyIG5hbWU9ImhpbGFyeS5jcmltc29uIiB2YWx1ZT0iMTE5Ij4KICAgICAgICAgICAgPFBBUkFNRVRFUiBuYW1lPSJQRVJTT05fQ09ERSIgdmFsdWU9"
     }
   },
