@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "This is an API for IGI (Identity Governance and Intelligence). You can find out more about     IGI  at [https://www.ibm.com/support/knowledgecenter/en/SSGHJR_5.2.3.1/com.ibm.igi.doc/kc-homepage.html]. To call API methods, you should first use Basic Authentification to call '/login' operation, The returned token can be used in the Bearer token 'igi_api_key' (exp: 'Authorization: Bearer ${Token}').",
+    "description" : "This is an API for IGI (Identity Governance and Intelligence). You can find out more about IGI at [https://www.ibm.com/support/knowledgecenter/en/SSGHJR_5.2.3.1/com.ibm.igi.doc/kc-homepage.html]. To call API methods, you should first use Basic Authentication (see 'igi_basic_auth' definition) to call '/login' operation, The returned token can be used as a Bearer token 'Authorization: Bearer ${Token}' (see 'igi_api_key' definition).",
     "version" : "1.0.0",
     "title" : "Swagger IGI Api",
     "termsOfService" : "http://swagger.io/terms/",
@@ -423,6 +423,60 @@
                 } ]
               }
             }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/users/accounts/{accountId}/password/check" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Check Password",
+        "description" : "Checks if the password specified is compliant with the password policies of a specific account (see Get Password Policy).",
+        "operationId" : "checkPassword",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "accountId",
+          "in" : "path",
+          "description" : "Specifies user account ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "codeOperation",
+          "in" : "query",
+          "description" : "transaction key that identifies the operation and who performed it (optional parameter). In case it is not set the system automatically creates one like rest_<random_number>.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ibm:params:scim:api:messages:2.0:ChangePwd",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
           },
           "204" : {
             "description" : "No content"
