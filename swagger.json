@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "This is an API for IGI (Identity Governance and Intelligence). You can find out more about IGI at [https://www.ibm.com/support/knowledgecenter/en/SSGHJR_5.2.3.1/com.ibm.igi.doc/kc-homepage.html]. To call API methods, you should first use Basic Authentication (see 'igi_basic_auth' definition) to call '/login' operation, The returned token can be used as a Bearer token 'Authorization: Bearer ${Token}' (see 'igi_api_key' definition).",
+    "description" : "This is an API for IGI (Identity Governance and Intelligence). You can find out more about IGI at [https://www.ibm.com/support/knowledgecenter/en/SSGHJR_5.2.3.1/com.ibm.igi.doc/kc-homepage.html]. To call API methods, you should first use Basic Authentication and call '/login' operation, The returned token should be used as a Bearer token ('Authorization: Bearer ${Token}') to call next operations.",
     "version" : "1.0.0",
     "title" : "Swagger IGI Api",
     "termsOfService" : "http://swagger.io/terms/",
