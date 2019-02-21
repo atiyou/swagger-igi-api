@@ -1,3 +1,1765 @@
 {
-  "swagger" : "2.0"
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This is an API for IGI (Identity Governance and Intelligence). You can find out more about IGI at [https://www.ibm.com/support/knowledgecenter/en/SSGHJR_5.2.5/com.ibm.igi.doc/reference/ref/ref_governance_rest_api_download.html]. To call API methods, you should first use Basic Authentication and call '/login' operation, The returned token should be used as a Bearer token ('Authorization: Bearer ${Token}') to call next operations.",
+    "version" : "1.0.0",
+    "title" : "Swagger IGI Api",
+    "termsOfService" : "http://swagger.io/terms/",
+    "contact" : {
+      "email" : "sgdbf-isam@saint-gobain.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/SGDBF_IT_IAM/swagger-igi-api/1.0.0",
+  "tags" : [ {
+    "name" : "AGC",
+    "description" : "Everything about Access Governance API methods",
+    "externalDocs" : {
+      "description" : "Find out more",
+      "url" : "http://www-01.ibm.com/support/docview.wss?uid=swg22017337"
+    }
+  }, {
+    "name" : "ARM",
+    "description" : "Everything about Access Request Management API methods",
+    "externalDocs" : {
+      "description" : "Find out more",
+      "url" : "http://www-01.ibm.com/support/docview.wss?uid=swg22017337"
+    }
+  }, {
+    "name" : "SCIM",
+    "description" : "Everything about SCIM (System for Cross-domain Identity Management) API methods",
+    "externalDocs" : {
+      "description" : "Find out more",
+      "url" : "http://www-01.ibm.com/support/docview.wss?uid=swg22017337"
+    }
+  }, {
+    "name" : "SECURITY",
+    "description" : "Everything about Security API methods",
+    "externalDocs" : {
+      "description" : "Find out more",
+      "url" : "http://www-01.ibm.com/support/docview.wss?uid=swg22017337"
+    }
+  }, {
+    "name" : "SoD",
+    "description" : "Everything about Separation of Duties API methods",
+    "externalDocs" : {
+      "description" : "Find out more",
+      "url" : "http://www-01.ibm.com/support/docview.wss?uid=swg22017337"
+    }
+  } ],
+  "schemes" : [ "https", "http" ],
+  "paths" : {
+    "/security/login" : {
+      "get" : {
+        "tags" : [ "SECURITY" ],
+        "summary" : "Login",
+        "description" : "Login to IGI system and obtains token needed to call next methods.",
+        "operationId" : "login",
+        "produces" : [ "TEXT_PLAIN", "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "security" : [ {
+          "igi_basic_auth" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK, body contains token to use calling next api method",
+            "schema" : {
+              "$ref" : "#/definitions/ApiTokenExample"
+            }
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/security/refresh" : {
+      "get" : {
+        "tags" : [ "SECURITY" ],
+        "summary" : "Refresh Token",
+        "description" : "Refresh token. Token expires after N minutes.",
+        "operationId" : "refresh",
+        "produces" : [ "TEXT_PLAIN", "application/scim+json" ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK, body contains the new token",
+            "schema" : {
+              "$ref" : "#/definitions/ApiTokenExample"
+            }
+          },
+          "401" : {
+            "description" : "Bearer Authentication required"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/agc/users" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Add User",
+        "description" : "Creates the object User that represents the digital identity of a common user of an organization.",
+        "operationId" : "addUser",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "codeOperation",
+          "in" : "query",
+          "description" : "transaction key that identifies the operation and who performed it (optional parameter). In case it is not set the system automatically creates one like rest_<random_number>.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "groupId",
+          "in" : "query",
+          "description" : "Specifies the group ID in which the user will be created",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:schemas:core:2.0:User with urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User extension",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:User", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User" ],
+                "id" : "2197",
+                "meta" : {
+                  "lastModified" : 1532440115098
+                },
+                "userName" : "steve.hook",
+                "name" : {
+                  "familyName" : "Hook",
+                  "givenName" : "Steve"
+                },
+                "emails" : [ {
+                  "value" : "steve.hook@awe.com"
+                } ],
+                "phoneNumbers" : [ {
+                  "value" : "0337-257 953 555"
+                } ],
+                "addresses" : [ {
+                  "streeAddress" : "1257, Avenue Street",
+                  "locality" : "New York",
+                  "region" : "New York",
+                  "postalCode" : 10007,
+                  "country" : "USA"
+                } ],
+                "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User" : {
+                  "codfisc" : "MTTMRFCCTESELNST",
+                  "sex" : 1,
+                  "dateOfBirth" : "1963-05-17",
+                  "placeOfBirth" : "Las Vegas",
+                  "userErc" : 2106,
+                  "swimUser" : 2194,
+                  "umeType" : "NONE",
+                  "lastModTime" : 1532440115098,
+                  "pwdmanagement_disabled" : 0,
+                  "pwdmanagement_id" : 5986,
+                  "organizationalunit_id" : 158,
+                  "organizationalunit_code" : "SGDBF",
+                  "organizationalunit_name" : "SGDBF"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/users/{userId}" : {
+      "get" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Find User by ID",
+        "description" : "Finds User through the User ID. This method returns all groups the user belongs to.",
+        "operationId" : "findUserById",
+        "produces" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "Specifies the ID of the user to retrieve",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK, body contains content",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:User", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User" ],
+                "id" : "2190",
+                "meta" : {
+                  "lastModified" : 1532082984000
+                },
+                "userName" : "steve.hook",
+                "name" : {
+                  "familyName" : "Hook",
+                  "givenName" : "Steve"
+                },
+                "emails" : [ {
+                  "value" : "steve.hook@awe.com"
+                } ],
+                "phoneNumbers" : [ {
+                  "value" : "0337-257 953 555"
+                } ],
+                "addresses" : [ {
+                  "streeAddress" : "1257, Avenue Street",
+                  "locality" : "New York",
+                  "region" : "New York",
+                  "postalCode" : 10007,
+                  "country" : "USA"
+                } ],
+                "groups" : [ {
+                  "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:Group", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Group" ],
+                  "id" : "158",
+                  "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Group" : {
+                    "name" : "SGDBF",
+                    "code" : "SGDBF",
+                    "attr3" : "0",
+                    "lastModTime" : 1528709573968,
+                    "hierarchy_id" : 1,
+                    "hierarchy_name" : "ORGANIZATIONAL_UNIT",
+                    "excludeSoD" : 0
+                  }
+                } ],
+                "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User" : {
+                  "codfisc" : "MTTMRFCCTESELNST",
+                  "sex" : 1,
+                  "dateOfBirth" : "1963-05-17",
+                  "placeOfBirth" : "Las Vegas",
+                  "userErc" : 2098,
+                  "swimUser" : 2187,
+                  "umeType" : "NONE",
+                  "lastModTime" : 1532082984000,
+                  "pwdmanagement_disabled" : 0,
+                  "pwdmanagement_id" : 5965,
+                  "organizationalunit_id" : 158,
+                  "organizationalunit_code" : "SGDBF",
+                  "organizationalunit_name" : "SGDBF",
+                  "overRemediated" : 0,
+                  "remediated" : 0,
+                  "underRemediated" : 0,
+                  "incompHigh" : false,
+                  "incompMedium" : false,
+                  "incompLow" : false
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Delete User",
+        "description" : "Deletes the object User.",
+        "operationId" : "deleteUser",
+        "produces" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "Specifies the ID of the user to delete",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "405" : {
+            "description" : "Method Not Allowed"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/users/.search" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Find User",
+        "description" : "Finds user through a SCIM search request.",
+        "operationId" : "findUser",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK, body contains content",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+                "totalResults" : 1,
+                "totalPage" : 1,
+                "page" : 1,
+                "itemsPerPage" : 10,
+                "resources" : [ {
+                  "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:User", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User" ],
+                  "id" : "2197",
+                  "meta" : {
+                    "lastModified" : 1532440116000
+                  },
+                  "userName" : "steve.hook",
+                  "name" : {
+                    "familyName" : "Hook",
+                    "givenName" : "Steve"
+                  },
+                  "emails" : [ {
+                    "value" : "steve.hook@awe.com"
+                  } ],
+                  "phoneNumbers" : [ {
+                    "value" : "0337-257 953 555"
+                  } ],
+                  "addresses" : [ {
+                    "streeAddress" : "1257, Avenue Street",
+                    "locality" : "New York",
+                    "region" : "New York",
+                    "postalCode" : "10007",
+                    "country" : "USA"
+                  } ],
+                  "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User" : {
+                    "codfisc" : "MTTMRFCCTESELNST",
+                    "sex" : "1",
+                    "dateOfBirth" : "1963-05-17",
+                    "placeOfBirth" : "Las Vegas",
+                    "userErc" : 2106,
+                    "swimUser" : 2194,
+                    "umeType" : "NONE",
+                    "lastModTime" : 1532440116000,
+                    "pwdmanagement_disabled" : 0,
+                    "pwdmanagement_id" : 5986,
+                    "organizationalunit_id" : 158,
+                    "organizationalunit_code" : "SGDBF",
+                    "organizationalunit_name" : "SGDBF"
+                  }
+                } ]
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/users/accounts/{accountId}/password/check" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Check Password",
+        "description" : "Checks if the password specified is compliant with the password policies of a specific account (see Get Password Policy).",
+        "operationId" : "checkPassword",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "accountId",
+          "in" : "path",
+          "description" : "Specifies user account ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "codeOperation",
+          "in" : "query",
+          "description" : "transaction key that identifies the operation and who performed it (optional parameter). In case it is not set the system automatically creates one like rest_<random_number>.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ibm:params:scim:api:messages:2.0:ChangePwd",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/users/accounts/{accountId}/password" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Change Password",
+        "description" : "Changes the password of a specific account. In JSON IGIPwd represents the IGI current password for that account.",
+        "operationId" : "changePassword",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "accountId",
+          "in" : "path",
+          "description" : "Specifies user account ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "codeOperation",
+          "in" : "query",
+          "description" : "transaction key that identifies the operation and who performed it (optional parameter). In case it is not set the system automatically creates one like rest_<random_number>.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ibm:params:scim:api:messages:2.0:ChangePwd",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/users/accounts/{accountId}/status" : {
+      "put" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Change User Account Status",
+        "description" : "Changes user account status; disable or enable account depending on the value of query params.",
+        "operationId" : "changeUserAccountStatus",
+        "produces" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "accountId",
+          "in" : "path",
+          "description" : "Specifies the user account ID",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "codeOperation",
+          "in" : "query",
+          "description" : "transaction key that identifies the operation and who performed it (optional parameter). In case it is not set the system automatically creates one like rest_<random_number>.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "technical",
+          "in" : "query",
+          "description" : "Technical block (admissible values from 0 to 9)",
+          "required" : false,
+          "type" : "integer"
+        }, {
+          "name" : "security",
+          "in" : "query",
+          "description" : "Security block (admissible values from 0 to 9)",
+          "required" : false,
+          "type" : "integer"
+        }, {
+          "name" : "terminated",
+          "in" : "query",
+          "description" : "Terminated block (admissible values from 0 to 9)",
+          "required" : false,
+          "type" : "integer"
+        }, {
+          "name" : "authoritative",
+          "in" : "query",
+          "description" : "Authoritative block (admissible values from 0 to 9)",
+          "required" : false,
+          "type" : "integer"
+        }, {
+          "name" : "expire",
+          "in" : "query",
+          "description" : "Expire block (admissible values from 0 to 9)",
+          "required" : false,
+          "type" : "integer"
+        }, {
+          "name" : "maintenance",
+          "in" : "query",
+          "description" : "Maintenance block (admissible values from 0 to 9)",
+          "required" : false,
+          "type" : "integer"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/users/{userId}/entitlement" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Add User Entitlement",
+        "description" : "Adds an entitlement to an user.",
+        "operationId" : "addUserEntitlement",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "the ID of the user to add entitlement",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "groupId",
+          "in" : "query",
+          "description" : "Specifies the group ID",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "entId",
+          "in" : "query",
+          "description" : "Specifies the list of entitlements Ids to add to user.",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "startDate",
+          "in" : "query",
+          "description" : "Start date of Validity of assignment. Date format must be yyyy-MM-dd",
+          "required" : false,
+          "format" : "yyyy-MM-dd",
+          "type" : "string"
+        }, {
+          "name" : "endDate",
+          "in" : "query",
+          "description" : "End date of Validity of assignment. Date format must be yyyy-MM-dd",
+          "required" : false,
+          "format" : "yyyy-MM-dd",
+          "type" : "string"
+        }, {
+          "name" : "checkIncompatibility",
+          "in" : "query",
+          "description" : "Boolean value",
+          "required" : false,
+          "type" : "boolean"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:schemas:core:2.0:User with urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User extension",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "405" : {
+            "description" : "Method Not Allowed"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Remove User Entitlement",
+        "description" : "Removes one or more entitlements associated to an user.",
+        "operationId" : "removeUserEntitlement",
+        "produces" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "the ID of the user to add entitlement",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "codeOperation",
+          "in" : "query",
+          "description" : "transaction key that identifies the operation and who performed it (optional parameter). In case it is not set the system automatically creates one like rest_<random_number>.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "entId",
+          "in" : "query",
+          "description" : "Specifies the list of entitlement IDs to remove",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "groupId",
+          "in" : "query",
+          "description" : "Specifies the group ID",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "405" : {
+            "description" : "Method Not Allowed"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/users/{userId}/entitlement/.search" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Find User Entitlement",
+        "description" : "Finds the entitlements of the user through a SCIM search request.",
+        "operationId" : "findUserEntitlement",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "Specifies the user ID",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+                "totalResults" : 1,
+                "totalPage" : 1,
+                "page" : 1,
+                "itemPerPage" : 100,
+                "resources" : [ {
+                  "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:Entitlement", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" ],
+                  "id" : "513",
+                  "meta" : {
+                    "created" : 1532440108000,
+                    "lastModified" : 1532440115000
+                  },
+                  "type" : 2,
+                  "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" : {
+                    "code" : "b0bf8391-e469-4e9d-a617-ec40a208443b",
+                    "application_id" : 109,
+                    "application_name" : "Portail Fournisseur",
+                    "attr4" : "rest_b37e790b-6738-45b5-b4f8-929b219870d8",
+                    "lastModTime" : 1532440115000,
+                    "visibilityViolation" : 0,
+                    "enabled" : 1,
+                    "group_code" : "SGDBF",
+                    "group_name" : "SGDBF",
+                    "group_id" : 158,
+                    "incompHigh" : false,
+                    "incompMedium" : false,
+                    "incompLow" : false,
+                    "administrative" : 0,
+                    "published" : 1,
+                    "isFulFilled" : false,
+                    "creationDate" : 1532440108000,
+                    "name" : "PortalUsers"
+                  }
+                } ]
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/hierarchies/{hierarchyId}/groups/.search" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Find Group",
+        "description" : "Finds group through a SCIM search request.",
+        "operationId" : "findGroup",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "hierarchyId",
+          "in" : "path",
+          "description" : "Specifies the hierarchy ID (1 for ORGANIZATIONAL_UNIT)",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+                "totalResults" : 1,
+                "totalPage" : 1,
+                "page" : 1,
+                "itemPerPage" : 100,
+                "resources" : [ {
+                  "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:Group", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Group" ],
+                  "id" : "102",
+                  "meta" : {
+                    "lastModified" : 1522317836706
+                  },
+                  "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Group" : {
+                    "name" : "FOURNISSEURS",
+                    "code" : "FOURNISSEURS",
+                    "description" : "FOURNISSEURS",
+                    "attr3" : "0",
+                    "lastModTime" : 1522317836706,
+                    "hierarchy_id" : 1,
+                    "hierarchy_name" : "ORGANIZATIONAL_UNIT",
+                    "incompHigh" : false,
+                    "incompMedium" : false,
+                    "incompLow" : false,
+                    "excludeSoD" : 0
+                  }
+                } ]
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/groups/{groupId}/entitlement/.search" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Find Entitlement in Group",
+        "description" : "Finds entitlements in a group through a SCIM search request.",
+        "operationId" : "findEntitlementsInGroup",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "groupId",
+          "in" : "path",
+          "description" : "Specifies the group ID",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK, body contains content"
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/entitlements/.search" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Find Entitlement",
+        "description" : "Finds entitlements through a SCIM search request.",
+        "operationId" : "findEntitlement",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+                "totalResults" : 1,
+                "totalPage" : 1,
+                "page" : 1,
+                "itemPerPage" : 100,
+                "resources" : [ {
+                  "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:Entitlement", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" ],
+                  "id" : "513",
+                  "meta" : {
+                    "created" : 1523958923000,
+                    "lastModified" : 1523958922000
+                  },
+                  "type" : 2,
+                  "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:Entitlement" : {
+                    "code" : "b0bf8391-e469-4e9d-a617-ec40a208443b",
+                    "application_id" : 109,
+                    "application_name" : "Portail Fournisseur",
+                    "lastModTime" : 1523958922000,
+                    "incompHigh" : false,
+                    "incompMedium" : false,
+                    "incompLow" : false,
+                    "administrative" : 0,
+                    "published" : 1,
+                    "isFulFilled" : false,
+                    "creationDate" : 1532440108000,
+                    "name" : "PortalUsers"
+                  }
+                } ]
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/arm/{workflowId}/users/.search" : {
+      "post" : {
+        "tags" : [ "ARM" ],
+        "summary" : "Find User by workflow",
+        "description" : "Finds users according to a variable set of parameters through a SCIM search request.",
+        "operationId" : "findUserByWorkflow",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "workflowId",
+          "in" : "path",
+          "description" : "Workflow ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+                "totalResults" : 1,
+                "page" : 1,
+                "itemsPerPage" : 100,
+                "resources" : [ {
+                  "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:User", "urn:ibm:params:scim:schemas:extension:bean:arm:2.0:User" ],
+                  "id" : "201",
+                  "meta" : { },
+                  "userName" : "steve.hook",
+                  "name" : {
+                    "familyName" : "Hook",
+                    "givenName" : "Steve"
+                  },
+                  "emails" : [ { } ],
+                  "phoneNumbers" : [ { } ],
+                  "addresses" : [ { } ],
+                  "urn:ibm:params:scim:schemas:extension:bean:arm:2.0:User" : {
+                    "codfisc" : "CLTSTWDCFTEST",
+                    "umeType" : "NONE",
+                    "pwdmanagement_disabled" : 0,
+                    "pwdmanagement_id" : 668,
+                    "organizationalunit_id" : 123,
+                    "organizationalunit_code" : "ou1",
+                    "organizationalunit_name" : "My First Organization Unit",
+                    "overRemediated" : 1,
+                    "remediated" : 1,
+                    "underRemediated" : 0,
+                    "incompHigh" : false,
+                    "incompMedium" : false,
+                    "incompLow" : false
+                  }
+                } ]
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/arm/{workflowId}/requests/user/entitlements" : {
+      "post" : {
+        "tags" : [ "ARM" ],
+        "summary" : "Generate User Role Request",
+        "description" : "Generates request for user role assignment (add roles, remove roles, update roles).",
+        "operationId" : "generateUserRoleRequest",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "codeOperation",
+          "in" : "query",
+          "description" : "transaction key that identifies the operation and who performed it (optional parameter). In case it is not set the system automatically creates one like rest_<random_number>.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "workflowId",
+          "in" : "path",
+          "description" : "Workflow ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ibm:params:scim:schemas:resource:bean:arm:2.0:Request with urn:ibm:params:scim:schemas:extension:bean:arm:2.0:RequestUserAccess extension",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ibm:params:scim:schemas:resource:bean:arm:2.0:Request", "urn:ibm:params:scim:schemas:extension:bean:arm:2.0:RequestUserAccess" ],
+                "id" : "1554",
+                "meta" : { },
+                "createdOn" : 1505921137489,
+                "reqtype" : 5,
+                "workflowPriority" : -1,
+                "beneficiary_code" : "steve.hook",
+                "requestStatus" : 2,
+                "urn:ibm:params:scim:schemas:extension:bean:arm:2.0:RequestUserAccess" : { }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/arm/{workflowId}/accountcfg/{accountcfgId}/users/{userId}/attributes" : {
+      "get" : {
+        "tags" : [ "ARM" ],
+        "summary" : "Get Account Configuration Attribute",
+        "description" : "Gets attributes configuration for an account configuration. During account creation gets the list of the attributes. Specifing also the account id gets a list of attribute and for each attribute also its value.",
+        "operationId" : "getAccountConfigurationAttribute",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "accountId",
+          "in" : "query",
+          "description" : "Specify the account identifier of the user. In this way the results contains also the value of the attributes for that account.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "workflowId",
+          "in" : "path",
+          "description" : "Workflow ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "accountcfgId",
+          "in" : "path",
+          "description" : "Account Configuration ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID used to find accounts configuration attributes",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ibm:params:scim:schemas:resource:bean:arm:2.0:Request with urn:ibm:params:scim:schemas:extension:bean:arm:2.0:RequestUserAccess extension",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+                "totalResults" : 15,
+                "totalPage" : 1,
+                "page" : 1,
+                "itemsPerPage" : 15,
+                "resources" : [ {
+                  "schemas" : [ "urn:ibm:params:scim:api:messages:2.0:EntityField" ],
+                  "id" : "101",
+                  "repository" : "Sales_Account",
+                  "localization" : "131",
+                  "mandatory" : true,
+                  "defaultValue" : "test",
+                  "editable" : false,
+                  "attributeType" : "remote",
+                  "visible" : 1,
+                  "dataType" : "TEXTFIELD",
+                  "name" : "Attribute_1",
+                  "value" : "attr1 value"
+                } ]
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/arm/{workflowId}/requests/user/modify" : {
+      "post" : {
+        "tags" : [ "ARM" ],
+        "summary" : "Generate User Modify Request",
+        "description" : "Generates request for user modify in order to modify user attributes",
+        "operationId" : "generateUserModifyRequest",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "codeOperation",
+          "in" : "query",
+          "description" : "transaction key that identifies the operation and who performed it (optional parameter). In case it is not set the system automatically creates one like rest_<random_number>.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "workflowId",
+          "in" : "path",
+          "description" : "Workflow ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ibm:params:scim:schemas:resource:bean:arm:2.0:Request with urn:ibm:params:scim:schemas:extension:bean:arm:2.0:RequestAccountCreation extension",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : null,
+              "schemas" : [ "urn:ibm:params:scim:schemas:resource:bean:arm:2.0:Request", "urn:ibm:params:scim:schemas:extension:bean:arm:2.0:RequestUserAccess" ],
+              "id" : "292",
+              "createdOn" : 1529314088072,
+              "reqtype" : 80,
+              "workflowPriority" : -1,
+              "notes" : "pippof: new request",
+              "applicant_id" : 201,
+              "applicant_code" : "pippof",
+              "applicant_name" : "Pippo",
+              "applicant_surname" : "Franco",
+              "requestStatus" : 7,
+              "urn:ibm:params:scim:schemas:extension:bean:arm:2.0:RequestUserAccess" : { }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/agc/users/advanced/.search" : {
+      "post" : {
+        "tags" : [ "AGC" ],
+        "summary" : "Find User Advanced",
+        "description" : "Finds user advanced allows to filter also for external attributes.",
+        "operationId" : "findUserAdvanced",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : {
+                "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+                "totalResults" : 1,
+                "totalPage" : 1,
+                "page" : 1,
+                "itemsPerPage" : 100,
+                "resources" : [ {
+                  "schemas" : [ "urn:ietf:params:scim:schemas:core:2.0:User", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User", "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:UserErc" ],
+                  "id" : "111",
+                  "meta" : {
+                    "lastModified" : 1540219980273
+                  },
+                  "userName" : "aaron.adams",
+                  "name" : {
+                    "familyName" : "Adams",
+                    "givenName" : "aron"
+                  },
+                  "emails" : [ {
+                    "value" : "aaron.adams@test.address"
+                  } ],
+                  "phoneNumbers" : [ {
+                    "value" : "Unknown"
+                  } ],
+                  "addresses" : [ {
+                    "streetAddress" : "Pennsylvania Avenue 435",
+                    "locality" : "Orlando",
+                    "region" : "Florida",
+                    "postalCode" : "41200",
+                    "country" : "US"
+                  } ],
+                  "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:UserErc" : {
+                    "attributes" : [ {
+                      "name" : "LAST_MOD_TIME",
+                      "value" : 1507586400000,
+                      "keyName" : "LAST_MOD_TIME"
+                    }, {
+                      "name" : "Manager",
+                      "value" : "test",
+                      "keyName" : "ATTR1"
+                    }, {
+                      "name" : "CREATED_ON",
+                      "value" : 1507586400000,
+                      "keyName" : "CREATED_ON"
+                    }, {
+                      "name" : "USERSTATUS",
+                      "value" : 1,
+                      "keyName" : "USERSTATUS"
+                    } ]
+                  },
+                  "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:User" : {
+                    "codfisc" : "TESTCOD785492269",
+                    "sex" : "0",
+                    "dateOfBirth" : "1967-05-29",
+                    "placeOfBirth" : "Orlando",
+                    "userErc" : 111,
+                    "swimUser" : 111,
+                    "umeType" : "NONE",
+                    "lastModTime" : 1540219980273,
+                    "pwdmanagement_disabled" : 0,
+                    "pwdmanagement_id" : 111,
+                    "organizationalunit_id" : 104,
+                    "organizationalunit_code" : "9e85c8d9",
+                    "organizationalunit_name" : "SALES DIVISION / SOUTH",
+                    "persontype_id" : 101,
+                    "persontype_name" : "External",
+                    "persontype_description" : "Non employee",
+                    "overRemediated" : 0,
+                    "remediated" : 0,
+                    "underRemediated" : 0,
+                    "incompHigh" : false,
+                    "incompMedium" : false,
+                    "incompLow" : false
+                  }
+                } ]
+              }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/arm/{workflowId}/users/{userId}/entitlements/available/.search" : {
+      "post" : {
+        "tags" : [ "ARM" ],
+        "summary" : "Find Entitlement to Add",
+        "description" : "Finds entitlements to be added during the generation of an request through a SCIM search request.",
+        "operationId" : "findEntitlementToAdd",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID used to find entitlements to add.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "workflowId",
+          "in" : "path",
+          "description" : "Workflow ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/arm/{workflowId}/users/{userId}/entitlements/.search" : {
+      "post" : {
+        "tags" : [ "ARM" ],
+        "summary" : "Find User Entitlement by workflow",
+        "description" : "Finds the entitlements that are assigned to an user according to the workflow associated to a user through a SCIM search request.",
+        "operationId" : "findUserEntitlementByWorkflow",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID used to find entitlements to add.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "workflowId",
+          "in" : "path",
+          "description" : "Workflow ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/arm/{workflowId}/requests/user/accounts" : {
+      "post" : {
+        "tags" : [ "ARM" ],
+        "summary" : "Generate User Account Management Request",
+        "description" : "Generates request for user account management (insert account, update account, delete account).",
+        "operationId" : "generateUserAccountManagementRequest",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "codeOperation",
+          "in" : "query",
+          "description" : "transaction key that identifies the operation and who performed it (optional parameter). In case it is not set the system automatically creates one like rest_<random_number>.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "workflowId",
+          "in" : "path",
+          "description" : "Workflow ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ibm:params:scim:schemas:resource:bean:arm:2.0:Request with urn:ibm:params:scim:schemas:extension:bean:arm:2.0:RequestAccountCreation extension",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : null,
+              "schemas" : [ "urn:ibm:params:scim:schemas:resource:bean:arm:2.0:Request", "urn:ibm:params:scim:schemas:extension:bean:arm:2.0:RequestUserAccess" ],
+              "id" : "160",
+              "createdOn" : 1529314088072,
+              "reqtype" : 80,
+              "workflowPriority" : -1,
+              "beneficiary_name" : "Jeremy",
+              "beneficiary_surname" : "Stone",
+              "beneficiary_id" : 127,
+              "beneficiary_code" : "jeremy.stone",
+              "applicant_id" : 101,
+              "applicant_code" : "jacob.daniels",
+              "applicant_name" : "Jacob",
+              "applicant_surname" : "Daniels",
+              "requestStatus" : 2,
+              "urn:ibm:params:scim:schemas:extension:bean:arm:2.0:RequestUserAccess" : { }
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/arm/{workflowId}/users/{userId}/accounts/available/.search" : {
+      "post" : {
+        "tags" : [ "ARM" ],
+        "summary" : "Find Assignable Account",
+        "description" : "Finds assignable accounts for a user.",
+        "operationId" : "findAssignableAccount",
+        "produces" : [ "application/scim+json" ],
+        "consumes" : [ "application/scim+json" ],
+        "parameters" : [ {
+          "name" : "workflowId",
+          "in" : "path",
+          "description" : "Workflow ID",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID used to find the assignalble accounts.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "realm",
+          "in" : "header",
+          "description" : "Realm",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "urn",
+          "in" : "body",
+          "description" : "urn:ietf:params:scim:api:messages:2.0:SearchRequest",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        } ],
+        "security" : [ {
+          "igi_api_key" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "examples" : {
+              "application/scim+json" : null,
+              "schemas" : [ "urn:ietf:params:scim:api:messages:2.0:ListResponse" ],
+              "totalResults" : 15,
+              "totalPage" : 1,
+              "page" : 1,
+              "itemsPerPage" : 15,
+              "resources" : [ {
+                "schemas" : [ "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:PwdCfg" ],
+                "id" : "104",
+                "meta" : {
+                  "lastModified" : "1509003129745",
+                  "lastModUser" : "admin"
+                },
+                "name" : "App Test Manual",
+                "sync" : 1
+              }, {
+                "schemas" : [ "urn:ibm:params:scim:schemas:extension:bean:agc:2.0:PwdCfg" ],
+                "id" : "2",
+                "meta" : {
+                  "lastModified" : "1509003129745",
+                  "lastModUser" : "admin"
+                },
+                "name" : "ISIM",
+                "description" : "Configuration for external ISIM Target",
+                "sync" : 1
+              } ]
+            }
+          },
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "igi_basic_auth" : {
+      "type" : "basic"
+    },
+    "igi_api_key" : {
+      "type" : "apiKey",
+      "name" : "Authorization",
+      "in" : "header"
+    }
+  },
+  "definitions" : {
+    "ApiTokenExample" : {
+      "type" : "string",
+      "example" : "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/Pgo8VXNlclNlY3VyaXR5RGF0YT4KICAgIDxTZWN1cml0eUVudGl0aWVzPgogICAgICAgIDxVc2VyIG5hbWU9ImhpbGFyeS5jcmltc29uIiB2YWx1ZT0iMTE5Ij4KICAgICAgICAgICAgPFBBUkFNRVRFUiBuYW1lPSJQRVJTT05fQ09ERSIgdmFsdWU9"
+    }
+  },
+  "externalDocs" : {
+    "description" : "Find out more about Swagger",
+    "url" : "http://swagger.io"
+  }
 }
